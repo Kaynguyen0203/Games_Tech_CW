@@ -59,12 +59,14 @@ void Asteroids::Start()
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
 
 	// Create a spaceship and add it to the world
-	mGameWorld->AddObject(CreateSpaceship());
+	
+	//mGameWorld->AddObject(CreateSpaceship());
+	
 	// Create some asteroids and add them to the world
 	CreateAsteroids(10);
 
 	//Create the GUI
-	CreateGUI();
+	CreateGUI();	
 
 	// Add a player (watcher) to the game world
 	mGameWorld->AddListener(&mPlayer);
@@ -244,6 +246,14 @@ void Asteroids::CreateGUI()
 		= static_pointer_cast<GUIComponent>(mGameOverLabel);
 	mGameDisplay->GetContainer()->AddComponent(game_over_component, GLVector2f(0.5f, 0.5f));
 
+	mGameStartLabel = shared_ptr<GUILabel>(new GUILabel("Press Q to start the game"));
+	mGameStartLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
+	mGameStartLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	mGameStartLabel->SetVisible(true);
+	shared_ptr<GUIComponent> game_start_component
+		= static_pointer_cast<GUIComponent>(mGameStartLabel);
+	mGameDisplay->GetContainer()->AddComponent(game_start_component, GLVector2f(0.5f, 0.5f));
+	
 }
 
 void Asteroids::OnScoreChanged(int score)
