@@ -20,6 +20,7 @@ Asteroids::Asteroids(int argc, char *argv[])
 {
 	mLevel = 0;
 	mAsteroidCount = 0;
+	mHasSpawned = false;
 }
 
 /** Destructor. */
@@ -96,8 +97,11 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 		break;
 	case 'q':
 	case 'Q':
-		mGameStartLabel->SetVisible(false);
-		mGameWorld->AddObject(CreateSpaceship());
+		if (!mHasSpawned) {
+			mHasSpawned = true;
+			mGameStartLabel->SetVisible(false);
+			mGameWorld->AddObject(CreateSpaceship());
+		}
 		break;
 	default:
 		break;
