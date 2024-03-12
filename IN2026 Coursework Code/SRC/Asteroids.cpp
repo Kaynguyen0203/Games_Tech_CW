@@ -94,6 +94,11 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 	case ' ':
 		mSpaceship->Shoot();
 		break;
+	case 'q':
+	case 'Q':
+		mGameStartLabel->SetVisible(false);
+		mGameWorld->AddObject(CreateSpaceship());
+		break;
 	default:
 		break;
 	}
