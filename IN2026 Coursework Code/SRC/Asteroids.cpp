@@ -90,21 +90,15 @@ void Asteroids::Stop()
 
 void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
-	switch (key)
-	{
-	case ' ':
-		mSpaceship->Shoot();
-		break;
-	case 'q':
-	case 'Q':
-		if (!mHasSpawned) {
+	if (!mHasSpawned) {
+		if (key == 'q' || key == 'Q') {
 			mHasSpawned = true;
 			mGameStartLabel->SetVisible(false);
 			mGameWorld->AddObject(CreateSpaceship());
 		}
-		break;
-	default:
-		break;
+	}
+	if (mHasSpawned) {
+		if (key == ' ') mSpaceship->Shoot();
 	}
 }
 
@@ -112,32 +106,36 @@ void Asteroids::OnKeyReleased(uchar key, int x, int y) {}
 
 void Asteroids::OnSpecialKeyPressed(int key, int x, int y)
 {
+	if (mHasSpawned){
 	switch (key)
-	{
-	// If up arrow key is pressed start applying forward thrust
-	case GLUT_KEY_UP: mSpaceship->Thrust(10); break;
-	// If left arrow key is pressed start rotating anti-clockwise
-	case GLUT_KEY_LEFT: mSpaceship->Rotate(90); break;
-	// If right arrow key is pressed start rotating clockwise
-	case GLUT_KEY_RIGHT: mSpaceship->Rotate(-90); break;
-	// Default case - do nothing
-	default: break;
+		{
+		// If up arrow key is pressed start applying forward thrust
+		case GLUT_KEY_UP: mSpaceship->Thrust(10); break;
+		// If left arrow key is pressed start rotating anti-clockwise
+		case GLUT_KEY_LEFT: mSpaceship->Rotate(90); break;
+		// If right arrow key is pressed start rotating clockwise
+		case GLUT_KEY_RIGHT: mSpaceship->Rotate(-90); break;
+		// Default case - do nothing
+		default: break;
+		}
 	}
 }
 
 void Asteroids::OnSpecialKeyReleased(int key, int x, int y)
 {
-	switch (key)
-	{
-	// If up arrow key is released stop applying forward thrust
-	case GLUT_KEY_UP: mSpaceship->Thrust(0); break;
-	// If left arrow key is released stop rotating
-	case GLUT_KEY_LEFT: mSpaceship->Rotate(0); break;
-	// If right arrow key is released stop rotating
-	case GLUT_KEY_RIGHT: mSpaceship->Rotate(0); break;
-	// Default case - do nothing
-	default: break;
-	} 
+	if (mHasSpawned) {
+		switch (key)
+		{
+			// If up arrow key is released stop applying forward thrust
+		case GLUT_KEY_UP: mSpaceship->Thrust(0); break;
+			// If left arrow key is released stop rotating
+		case GLUT_KEY_LEFT: mSpaceship->Rotate(0); break;
+			// If right arrow key is released stop rotating
+		case GLUT_KEY_RIGHT: mSpaceship->Rotate(0); break;
+			// Default case - do nothing
+		default: break;
+		}
+	}
 }
 
 
@@ -258,10 +256,12 @@ void Asteroids::CreateGUI()
 	mGameStartLabel = shared_ptr<GUILabel>(new GUILabel("Press Q to start the game"));
 	mGameStartLabel->SetHorizontalAlignment(GUIComponent::GUI_HALIGN_CENTER);
 	mGameStartLabel->SetVerticalAlignment(GUIComponent::GUI_VALIGN_MIDDLE);
+	mGameStartLabel->SetColor(GLVector3f(0,1,0));
 	mGameStartLabel->SetVisible(true);
 	shared_ptr<GUIComponent> game_start_component
 		= static_pointer_cast<GUIComponent>(mGameStartLabel);
 	mGameDisplay->GetContainer()->AddComponent(game_start_component, GLVector2f(0.5f, 0.5f));
+
 	
 }
 
