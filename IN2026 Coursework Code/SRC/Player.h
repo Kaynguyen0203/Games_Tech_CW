@@ -49,6 +49,10 @@ public:
 			(*lit)->OnPlayerHealth(mLives);
 		}
 	}
+	void ResetLives() {
+		mLives = 4;
+		FirePlayerHealth();
+	}
 
 private:
 	int mLives;

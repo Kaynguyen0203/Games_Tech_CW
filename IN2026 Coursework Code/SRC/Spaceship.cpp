@@ -10,13 +10,13 @@ using namespace std;
 
 /**  Default constructor. */
 Spaceship::Spaceship()
-	: GameObject("Spaceship"), mThrust(0)
+	: GameObject("Spaceship"), mThrust(0), mIsDemo(true), mIsShoot(false)
 {
 }
 
 /** Construct a spaceship with given position, velocity, acceleration, angle, and rotation. */
 Spaceship::Spaceship(GLVector3f p, GLVector3f v, GLVector3f a, GLfloat h, GLfloat r)
-	: GameObject("Spaceship", p, v, a, h, r), mThrust(0)
+	: GameObject("Spaceship", p, v, a, h, r), mThrust(0), mIsDemo(true), mIsShoot(false)
 {
 }
 
@@ -33,9 +33,38 @@ Spaceship::~Spaceship(void)
 
 // PUBLIC INSTANCE METHODS ////////////////////////////////////////////////////
 
+
+void Spaceship::Demo(void) {
+	int isThrust = rand() % 20;
+	int leftOrRight = rand() % 2;
+	int isShoot = rand() % 2;
+
+	if (isThrust == 1) Thrust(10);
+
+	if (leftOrRight == 1) {
+		Rotate(90);
+	} else {
+		Rotate(-90);
+	}
+
+	if (isShoot == 1 && mIsShoot) Shoot();
+}
+
+void Spaceship::SetDemoStop(void) {
+	mIsDemo = false;
+}
+void Spaceship::SetDemoRemove(void) {
+	mWorld->FlagForRemoval(GetThisPtr());
+}
+void Spaceship::SetShoot(void) {
+	mIsShoot = true;
+}
 /** Update this spaceship. */
 void Spaceship::Update(int t)
 {
+	if (mIsDemo) { 
+		Demo(); 
+	}
 	// Call parent update function
 	GameObject::Update(t);
 }

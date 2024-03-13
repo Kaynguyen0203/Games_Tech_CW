@@ -37,6 +37,10 @@ public:
 			(*lit)->OnScoreChanged(mScore);
 		}
 	}
+	void ResetScore() {
+		mScore = 0;
+		FireScoreChanged();
+	}
 
 private:
 	int mScore;

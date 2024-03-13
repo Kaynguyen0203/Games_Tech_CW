@@ -64,7 +64,7 @@ void Asteroids::Start()
 
 	// Create a spaceship and add it to the world
 	
-	//mGameWorld->AddObject(CreateSpaceship());
+	mGameWorld->AddObject(CreateSpaceship());
 	
 	// Create some asteroids and add them to the world
 	CreateAsteroids(10);
@@ -78,6 +78,7 @@ void Asteroids::Start()
 	// Add this class as a listener of the player
 	mPlayer.AddListener(thisPtr);
 
+	SetTimer(500, DEMO_START_SHOOT);
 	// Start the game
 	GameSession::Start();
 }
@@ -96,8 +97,13 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 	if (!mHasSpawned) {
 		if (key == 'q' || key == 'Q') {
 			mHasSpawned = true;
+			mSpaceship->SetDemoRemove();
 			mGameStartLabel->SetVisible(false);
-			mGameWorld->AddObject(CreateSpaceship());
+			mGameWorld->AddObject(mSpaceship);
+			mSpaceship->SetDemoStop();
+			mScoreKeeper.ResetScore();
+			mPlayer.ResetLives();
+			mLevel = 0;
 		}
 	}
 	if (mHasSpawned) {
@@ -190,6 +196,8 @@ void Asteroids::OnTimer(int value)
 		mGameOverLabel->SetVisible(true);
 	}
 
+	if (value == DEMO_START_SHOOT);
+		mSpaceship->SetShoot();
 }
 
 // PROTECTED INSTANCE METHODS /////////////////////////////////////////////////
