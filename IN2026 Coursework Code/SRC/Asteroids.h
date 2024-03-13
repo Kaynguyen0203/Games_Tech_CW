@@ -37,6 +37,7 @@ public:
 	// Declaration of the IPlayerLister interface //////////////////////////////
 
 	void OnPlayerKilled(int lives_left);
+	void OnPlayerHealth(int lives_left);
 
 	// Declaration of IGameWorldListener interface //////////////////////////////
 
@@ -57,11 +58,13 @@ private:
 
 	uint mLevel;
 	uint mAsteroidCount;
+	uint mHealthCount;
 
 	void ResetSpaceship();
 	shared_ptr<GameObject> CreateSpaceship();
 	void CreateGUI();
 	void CreateAsteroids(const uint num_asteroids);
+	void CreateHealth(const uint num_health);
 	shared_ptr<GameObject> CreateExplosion();
 	
 	const static uint SHOW_GAME_OVER = 0;

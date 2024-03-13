@@ -11,6 +11,7 @@
 #include "BoundingSphere.h"
 #include "GUILabel.h"
 #include "Explosion.h"
+#include "Health.h"
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -20,6 +21,7 @@ Asteroids::Asteroids(int argc, char *argv[])
 {
 	mLevel = 0;
 	mAsteroidCount = 0;
+	mHealthCount = 0;
 	mHasSpawned = false;
 }
 
@@ -65,7 +67,7 @@ void Asteroids::Start()
 	
 	// Create some asteroids and add them to the world
 	CreateAsteroids(10);
-
+	CreateHealth(2);
 	//Create the GUI
 	CreateGUI();	
 
@@ -155,6 +157,11 @@ void Asteroids::OnObjectRemoved(GameWorld* world, shared_ptr<GameObject> object)
 			SetTimer(500, START_NEXT_LEVEL); 
 		}
 	}
+	if (object->GetType() == GameObjectType("Health"))
+	{
+		mHealthCount--;
+	}
+
 }
 
 // PUBLIC INSTANCE METHODS IMPLEMENTING ITimerListener ////////////////////////
@@ -172,6 +179,9 @@ void Asteroids::OnTimer(int value)
 		mLevel++;
 		int num_asteroids = 10 + 2 * mLevel;
 		CreateAsteroids(num_asteroids);
+		if (mHealthCount == 0) {
+			CreateHealth(2);
+		}
 	}
 
 	if (value == SHOW_GAME_OVER)
@@ -216,6 +226,18 @@ void Asteroids::CreateAsteroids(const uint num_asteroids)
 		asteroid->SetSprite(asteroid_sprite);
 		asteroid->SetScale(0.2f);
 		mGameWorld->AddObject(asteroid);
+	}
+}
+
+void Asteroids::CreateHealth(const uint num_health)
+{
+	mHealthCount = num_health;
+	shared_ptr<Shape> health_shape = make_shared<Shape>("health.shape");
+	for (uint i = 0; i < num_health; i++) {
+		shared_ptr<GameObject> health = make_shared<Health>();
+		health->SetBoundingShape(make_shared<BoundingSphere>(health->GetThisPtr(), 6.0f));
+		health->SetShape(health_shape);
+		mGameWorld->AddObject(health);
 	}
 }
 
@@ -297,6 +319,13 @@ void Asteroids::OnPlayerKilled(int lives_left)
 	{
 		SetTimer(500, SHOW_GAME_OVER);
 	}
+}
+void Asteroids::OnPlayerHealth(int lives_left) {
+	std::ostringstream msg_stream;
+	msg_stream << "Lives: " << lives_left;
+	std::string lives_msg = msg_stream.str();
+	mLivesLabel->SetText(lives_msg);
+
 }
 
 shared_ptr<GameObject> Asteroids::CreateExplosion()
