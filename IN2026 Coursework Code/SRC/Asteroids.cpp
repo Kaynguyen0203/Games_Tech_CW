@@ -60,6 +60,7 @@ void Asteroids::Start()
 	Animation *explosion_anim = AnimationManager::GetInstance().CreateAnimationFromFile("explosion", 64, 1024, 64, 64, "explosion_fs.png");
 	Animation *asteroid1_anim = AnimationManager::GetInstance().CreateAnimationFromFile("asteroid1", 128, 8192, 128, 128, "asteroid1_fs.png");
 	Animation *spaceship_anim = AnimationManager::GetInstance().CreateAnimationFromFile("spaceship", 128, 128, 128, 128, "spaceship_fs.png");
+	Animation* health_anim = AnimationManager::GetInstance().CreateAnimationFromFile("health", 128, 128, 128, 128, "health_fs.png");
 
 	// Create a spaceship and add it to the world
 	
@@ -232,11 +233,14 @@ void Asteroids::CreateAsteroids(const uint num_asteroids)
 void Asteroids::CreateHealth(const uint num_health)
 {
 	mHealthCount = num_health;
-	shared_ptr<Shape> health_shape = make_shared<Shape>("health.shape");
 	for (uint i = 0; i < num_health; i++) {
+		Animation* anim_ptr = AnimationManager::GetInstance().GetAnimationByName("health");
+		shared_ptr<Sprite> health_sprite
+			= make_shared<Sprite>(anim_ptr->GetWidth(), anim_ptr->GetHeight(), anim_ptr);
 		shared_ptr<GameObject> health = make_shared<Health>();
-		health->SetBoundingShape(make_shared<BoundingSphere>(health->GetThisPtr(), 6.0f));
-		health->SetShape(health_shape);
+		health->SetBoundingShape(make_shared<BoundingSphere>(health->GetThisPtr(), 7.0f));
+		health->SetSprite(health_sprite);
+		health->SetScale(0.1f);
 		mGameWorld->AddObject(health);
 	}
 }
