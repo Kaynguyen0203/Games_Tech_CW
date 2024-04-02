@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "Spaceship.h"
 #include "BoundingSphere.h"
+#include <cmath>
 
 using namespace std;
 
@@ -10,7 +11,7 @@ using namespace std;
 
 /**  Default constructor. */
 Spaceship::Spaceship()
-	: GameObject("Spaceship"), mThrust(0), mIsDemo(true), mIsShoot(false)
+	: GameObject("Spaceship"), mThrust(0), mIsDemo(true), mIsShoot(false), asteroidList()
 {
 }
 
@@ -32,22 +33,40 @@ Spaceship::~Spaceship(void)
 }
 
 // PUBLIC INSTANCE METHODS ////////////////////////////////////////////////////
-
+void Spaceship::SetAsteroidsList(vector<shared_ptr<GameObject>> mAsteroidList) {
+	asteroidList = mAsteroidList;
+}
 
 void Spaceship::Demo(void) {
 	int isThrust = rand() % 20;
-	int leftOrRight = rand() % 2;
 	int isShoot = rand() % 2;
 
 	if (isThrust == 1) Thrust(10);
+	if (isShoot == 1 && mIsShoot) Shoot();
 
-	if (leftOrRight == 1) {
+	GLVector3f asteroidPosition = asteroidList[0]->GetPosition();
+	GLVector3f spaceshipPosition = this->GetPosition();
+	float dx = asteroidPosition.x - spaceshipPosition.x;
+	float dy = asteroidPosition.y - spaceshipPosition.y;
+	double angleToAsteroid = atan2(dy, dx) * (180 / M_PI);
+
+
+	double spaceshipAngle = this->GetAngle();
+	double angleDifference = angleToAsteroid - spaceshipAngle;
+
+	if (angleDifference > 180.0) {
+		angleDifference -= 360.0;
+	}
+	else if (angleDifference < -180.0) {
+		angleDifference += 360.0;
+	}
+	if (angleDifference < 0) {
 		Rotate(90);
-	} else {
+	}
+	else {
 		Rotate(-90);
 	}
-
-	if (isShoot == 1 && mIsShoot) Shoot();
+	
 }
 
 void Spaceship::SetDemoStop(void) {

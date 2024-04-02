@@ -9,6 +9,7 @@
 #include "ScoreKeeper.h"
 #include "Player.h"
 #include "IPlayerListener.h"
+#include <vector>
 
 class GameObject;
 class Spaceship;
@@ -54,6 +55,7 @@ private:
 	shared_ptr<GUILabel> mLivesLabel;
 	shared_ptr<GUILabel> mGameOverLabel;
 	shared_ptr<GUILabel> mGameStartLabel;
+	vector<shared_ptr<GameObject>> mAsteroidList;
 	bool mHasSpawned;
 
 	uint mLevel;

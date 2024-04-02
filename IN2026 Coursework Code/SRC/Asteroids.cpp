@@ -12,6 +12,7 @@
 #include "GUILabel.h"
 #include "Explosion.h"
 #include "Health.h"
+#include <vector>
 
 // PUBLIC INSTANCE CONSTRUCTORS ///////////////////////////////////////////////
 
@@ -23,6 +24,7 @@ Asteroids::Asteroids(int argc, char *argv[])
 	mAsteroidCount = 0;
 	mHealthCount = 0;
 	mHasSpawned = false;
+	mAsteroidList;
 }
 
 /** Destructor. */
@@ -68,6 +70,7 @@ void Asteroids::Start()
 	
 	// Create some asteroids and add them to the world
 	CreateAsteroids(10);
+	
 	CreateHealth(2);
 	//Create the GUI
 	CreateGUI();	
@@ -127,6 +130,8 @@ void Asteroids::OnSpecialKeyPressed(int key, int x, int y)
 		// Default case - do nothing
 		default: break;
 		}
+	}
+	if (key == GLUT_KEY_DOWN) {
 	}
 }
 
@@ -196,7 +201,7 @@ void Asteroids::OnTimer(int value)
 		mGameOverLabel->SetVisible(true);
 	}
 
-	if (value == DEMO_START_SHOOT);
+	if (value == DEMO_START_SHOOT)
 		mSpaceship->SetShoot();
 }
 
@@ -235,7 +240,10 @@ void Asteroids::CreateAsteroids(const uint num_asteroids)
 		asteroid->SetSprite(asteroid_sprite);
 		asteroid->SetScale(0.2f);
 		mGameWorld->AddObject(asteroid);
+
+		mAsteroidList.push_back(asteroid);
 	}
+	mSpaceship->SetAsteroidsList(mAsteroidList);
 }
 
 void Asteroids::CreateHealth(const uint num_health)
