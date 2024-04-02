@@ -38,8 +38,8 @@ void Spaceship::SetAsteroidsList(vector<shared_ptr<GameObject>> mAsteroidList) {
 }
 
 void Spaceship::Demo(void) {
-	int isThrust = rand() % 20;
-	int isShoot = rand() % 2;
+	int isThrust = rand() % 200;
+	int isShoot = rand() % 20;
 
 	if (isThrust == 1) Thrust(10);
 	if (isShoot == 1 && mIsShoot) Shoot();

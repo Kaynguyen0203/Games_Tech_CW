@@ -57,7 +57,7 @@ private:
 	shared_ptr<GUILabel> mGameStartLabel;
 	vector<shared_ptr<GameObject>> mAsteroidList;
 	bool mHasSpawned;
-
+	bool mIsDemoDead;
 	uint mLevel;
 	uint mAsteroidCount;
 	uint mHealthCount;

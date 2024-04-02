@@ -49,8 +49,8 @@ public:
 			(*lit)->OnPlayerHealth(mLives);
 		}
 	}
-	void ResetLives() {
-		mLives = 4;
+	void ResetLives(int num) {
+		mLives = num;
 		FirePlayerHealth();
 	}
 

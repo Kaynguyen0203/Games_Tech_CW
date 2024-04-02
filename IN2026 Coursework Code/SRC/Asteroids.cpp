@@ -24,6 +24,7 @@ Asteroids::Asteroids(int argc, char *argv[])
 	mAsteroidCount = 0;
 	mHealthCount = 0;
 	mHasSpawned = false;
+	mIsDemoDead = false;
 	mAsteroidList;
 }
 
@@ -99,13 +100,20 @@ void Asteroids::OnKeyPressed(uchar key, int x, int y)
 {
 	if (!mHasSpawned) {
 		if (key == 'q' || key == 'Q') {
+			if (!mIsDemoDead) {
+				mSpaceship->SetDemoRemove();
+				mPlayer.ResetLives(4);
+			}
+			else {
+				mPlayer.ResetLives(3);
+			}
 			mHasSpawned = true;
-			mSpaceship->SetDemoRemove();
 			mGameStartLabel->SetVisible(false);
+			mGameOverLabel->SetVisible(false);
 			mGameWorld->AddObject(mSpaceship);
 			mSpaceship->SetDemoStop();
 			mScoreKeeper.ResetScore();
-			mPlayer.ResetLives();
+			
 			mLevel = 0;
 		}
 	}
@@ -194,11 +202,13 @@ void Asteroids::OnTimer(int value)
 		if (mHealthCount == 0) {
 			CreateHealth(2);
 		}
+		mSpaceship->Reset();
 	}
 
 	if (value == SHOW_GAME_OVER)
 	{
 		mGameOverLabel->SetVisible(true);
+		if (!mHasSpawned) { mIsDemoDead = true; }
 	}
 
 	if (value == DEMO_START_SHOOT)
